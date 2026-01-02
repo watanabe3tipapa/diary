@@ -1,4 +1,9 @@
-# diary_
+# diary
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.0-green.svg)
+
+---
 
 GitHub を日記帳として使うためのリポジトリです。
 
@@ -20,7 +25,7 @@ GitHub を日記帳として使うためのリポジトリです。
 python3 scripts/create_diary.py
 
 # 日付を指定して作成
-python3 scripts/create_diary.py --date 2025-01-01
+python3 scripts/create_diary.py --date 2026-01-01
 ```
 
 #### Shell スクリプト
@@ -30,7 +35,7 @@ python3 scripts/create_diary.py --date 2025-01-01
 ./scripts/create_diary.sh
 
 # 日付を指定して作成
-./scripts/create_diary.sh diary 2025-01-01
+./scripts/create_diary.sh diary 2026-01-01
 ```
 
 ### GitHub Actions
@@ -40,3 +45,6 @@ python3 scripts/create_diary.py --date 2025-01-01
 ## ライセンス
 
 このプロジェクトは [MIT License](LICENSE) の下でライセンスされています。
+
+
+---
