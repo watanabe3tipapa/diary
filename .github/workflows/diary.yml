@@ -1,8 +1,11 @@
 name: Create Diary
 on:
   schedule:
-    - cron: '0 0 * * *'   # UTC 00:00 daily (adjust if needed)
+    - cron: '0 0 * * *'   # UTC 00:00 daily
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   create-diary:
@@ -18,49 +21,20 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Create directories
-        run: mkdir -p diary templates
-
-      - name: Add template if missing
-        run: |
-          if [ ! -f templates/diary.md ]; then
-            cat > templates/diary.md <<'MD'
----
-title: "{{date}}"
-date: "{{date}}"
-tags: []
-mood: neutral
----
-
-# {{date}}
-
-## 今日のトピック
-- 
-
-## 今日の学び
-- 
-
-## 今日の TODO / リンク
-- 
-
-## 振り返り
-- 
-MD
-          fi
-
       - name: Generate diary
-        env:
-          GIT_AUTHOR_NAME: github-actions
-          GIT_AUTHOR_EMAIL: actions@github.com
+        run: python scripts/create_diary.py
+
+      - name: Commit and Push
         run: |
-          DATE=$(date -u +%F)
-          TARGET="diary/$DATE.md"
-          if [ -f "$TARGET" ]; then
-            echo "Already exists: $TARGET"
-            exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add diary/*.md
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(diary): add new diary entry"
+            git push
           fi
-          sed "s/{{date}}/$DATE/g" templates/diary.md > "$TARGET"
-          git add "$TARGET"
-          git commit -m "chore(diary): add $DATE.md" || echo "no changes to commit"
-          git push origin HEAD
 
